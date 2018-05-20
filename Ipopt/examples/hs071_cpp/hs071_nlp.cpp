@@ -92,10 +92,10 @@ bool HS071_NLP::get_starting_point(Index n, bool init_x, Number* x,
   assert(init_lambda == false);
 
   // initialize to the given starting point
-  x[0] = 1.0;
-  x[1] = 5.0;
-  x[2] = 5.0;
-  x[3] = 1.0;
+  x[0] = 0.0;
+  x[1] = 0.0;
+  x[2] = 0.0;
+  x[3] = 0.0;
 
   return true;
 }

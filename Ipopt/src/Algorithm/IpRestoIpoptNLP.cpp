@@ -483,7 +483,7 @@ namespace Ipopt
     const CompoundVector* c_vec = static_cast<const CompoundVector*>(&x);
     DBG_ASSERT(c_vec);
     SmartPtr<const Vector> x_only = c_vec->GetComp(0);
-    ret = x.Sum() - x_only->Sum();
+    ret = x.Sum() - x_only->Sum();  // okay that makes sense
     DBG_PRINT((1,"xdiff sum = %e\n",ret));
     ret = rho_ * ret;
     DBG_PRINT((1,"rho_ = %e\n",rho_));
@@ -497,15 +497,17 @@ namespace Ipopt
     DBG_PRINT((1,"Eta = %e\n",Eta(mu)));
     ret2 = Eta(mu)/2.0*ret2*ret2;
 
-    ret += ret2;
+//    ret += ret2;
 
     // We evaluate also the objective function for the original
     // problem here.  This might be wasteful, but it will detect if
     // the original objective function cannot be evaluated at the
     // trial point in the restoration phase
-    if (evaluate_orig_obj_at_resto_trial_) {
-      /* Number orig_f = */ orig_ip_nlp_->f(*x_only);
-    }
+
+    Number orig_f = orig_ip_nlp_->f(*x_only);
+
+    ret += orig_f;
+
 
     return ret;
   }
@@ -521,11 +523,15 @@ namespace Ipopt
 
     CompoundVector* c_vec = static_cast<CompoundVector*>(GetRawPtr(retPtr));
     DBG_ASSERT(c_vec);
+    //{
+    SmartPtr<const Vector> gf_original = orig_ip_nlp_->grad_f(*x_only_in);
+//      std::cout << "success!";
+//    }
     SmartPtr<Vector> x_only = c_vec->GetCompNonConst(0);
-    x_only->Copy(*x_only_in);
-    x_only->Axpy(-1.0, *x_ref_);
-    x_only->ElementWiseMultiply(*dr_x_);
-    x_only->Scal(Eta(mu));
+    x_only->Copy(*gf_original);
+//    x_only->Axpy(-1.0, *x_ref_);
+    //x_only->ElementWiseMultiply(*dr_x_);
+    //x_only->Scal(Eta(mu));
 
     return ConstPtr(retPtr);
   }
@@ -689,7 +695,7 @@ namespace Ipopt
     SmartPtr<const Vector> Cyd0 = Cyd->GetComp(0);
 
     // calculate the original hessian
-    SmartPtr<const SymMatrix> h_con_orig = orig_ip_nlp_->h(*x_only, 0.0, *Cyc0, *Cyd0);
+    SmartPtr<const SymMatrix> h_con_orig = orig_ip_nlp_->h(*x_only, 1.0, *Cyc0, *Cyd0);
 
     // Create the new compound matrix
     // The SumSymMatrix is auto_allocated
@@ -699,7 +705,7 @@ namespace Ipopt
     SmartPtr<Matrix> h_sum_mat = retPtr->GetCompNonConst(0,0);
     SmartPtr<SumSymMatrix> h_sum = static_cast<SumSymMatrix*>(GetRawPtr(h_sum_mat));
     h_sum->SetTerm(0, 1.0, *h_con_orig);
-    h_sum->SetTerm(1, obj_factor*Eta(mu), *DR_x_);
+    h_sum->SetTerm(1, 0.0, *DR_x_);
 
     return GetRawPtr(retPtr);
   }
@@ -716,7 +722,7 @@ namespace Ipopt
       SmartPtr<Matrix> h_sum_mat = retPtr->GetCompNonConst(0,0);
       SmartPtr<SumSymMatrix> h_sum = static_cast<SumSymMatrix*>(GetRawPtr(h_sum_mat));
       h_sum->SetTerm(0, 1.0, *h_con_orig);
-      h_sum->SetTerm(1, 1.0, *DR_x_);
+      h_sum->SetTerm(1, 0.0, *DR_x_);
     }
 
     return GetRawPtr(retPtr);
