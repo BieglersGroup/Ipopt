@@ -41,7 +41,7 @@ namespace Ipopt
     roptions->AddLowerBoundedNumberOption(
       "max_cpu_time",
       "Maximum number of CPU seconds.",
-      0.0, true, 1e6,
+      0.0, true, 60,
       "A limit on CPU seconds that Ipopt can use to solve one problem.  If "
       "during the convergence check this limit is exceeded, Ipopt will "
       "terminate with a corresponding error message.");
