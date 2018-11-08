@@ -492,6 +492,9 @@ case $build in
   *-cygwin* | *-mingw*)
     JIPOPTDLL=jipopt.dll
     ;;
+  *-darwin* )
+    JIPOPTDLL=libjipopt.dylib
+    ;;  
   *)
     JIPOPTDLL=libjipopt.so
     ;;
@@ -561,6 +564,10 @@ if test x"$use_matlab_home" = x; then
     MATLAB_HOME=`echo $mexpath | sed -e "s=/bin/matlab$EXEEXT$=="`
     AC_MSG_RESULT([$MATLAB_HOME])
   fi
+elif test x"$use_matlab_home" = xno; then
+  # Matlab interface disabled by user
+  MATLAB_HOME=""
+  AC_MSG_RESULT([disabled])
 else
   MATLAB_HOME="$use_matlab_home"
   AC_MSG_RESULT([$MATLAB_HOME])
@@ -695,8 +702,9 @@ AC_SUBST(MWMA57PATH)
 
 ASTYLE=astyle
 AC_SUBST(ASTYLE)
-ASTYLEFLAGS="--mode=c --indent=spaces=2 --indent-cases --indent-namespaces --min-conditional-indent=1 --brackets=linux --brackets=break-closing --convert-tabs"
+ASTYLEFLAGS="--mode=c -A1 --indent=spaces=3 --indent-switches --min-conditional-indent=1 --convert-tabs --align-pointer=type --pad-oper --add-brackets"
 AC_SUBST(ASTYLEFLAGS)
+
 
 #########################
 # Makefile conditionals #
