@@ -495,7 +495,8 @@ DISTCLEANFILES = examples/Cpp_example/cpp_example@EXEEXT@ \
 	examples/hs071_cpp/hs071_cpp@EXEEXT@ \
 	examples/hs071_cpp/hs071_main.@OBJEXT@ \
 	examples/hs071_cpp/hs071_nlp.@OBJEXT@ \
-	examples/hs071_cpp/ipopt.out examples/hs071_c/hs071_c@EXEEXT@ \
+	examples/hs071_cpp/ipopt.out \
+	examples/hs071_c/hs071_c@EXEEXT@ \
 	examples/hs071_c/hs071_c.@OBJEXT@ examples/hs071_c/ipopt.out \
 	examples/hs071_f/hs071_f@EXEEXT@ \
 	examples/hs071_f/hs071_f.@OBJEXT@ examples/hs071_f/IPOPT.OUT \
@@ -577,6 +578,7 @@ examples/Cpp_example/Makefile: $(top_builddir)/config.status $(top_srcdir)/examp
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 examples/hs071_cpp/Makefile: $(top_builddir)/config.status $(top_srcdir)/examples/hs071_cpp/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
+
 examples/hs071_c/Makefile: $(top_builddir)/config.status $(top_srcdir)/examples/hs071_c/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 examples/ScalableProblems/Makefile: $(top_builddir)/config.status $(top_srcdir)/examples/ScalableProblems/Makefile.in

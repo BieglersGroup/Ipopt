@@ -260,9 +260,6 @@ namespace Ipopt
         // Reset Cpu start time (so doesn't carry over from previous Optimize)
         IpData().ResetCpuStartTime();
 
-        if (!copyright_message_printed) {
-            print_copyright_message(Jnlst());
-        }
 
         if (!isResto) {
             Jnlst().Printf(J_ITERSUMMARY, J_MAIN, "This is Ipopt version " IPOPT_VERSION ", running with linear solver %s.\n", linear_solver_.c_str());
