@@ -774,7 +774,7 @@ namespace Ipopt
                        ns_only_upper);
 
         std::ofstream myfile;
-        myfile.open("timings.txt", std::ios::app);
+        myfile.open("timings_ipopt_vanilla0.txt", std::ios::app);
         myfile << "\tn\t" << nx_tot << "\tme\t" << IpData().curr()->y_c()->Dim() << "\tmi\t" << ns_tot;
         myfile.close();
     }

@@ -965,7 +965,7 @@ namespace Ipopt
             Number cpu_time_funcs = p2ip_nlp->TotalFunctionEvaluationCpuTime();
 
             std::ofstream myfile;
-            myfile.open("timings_ipopt_resto0.txt", std::ios::app);
+            myfile.open("timings_ipopt_vanilla0.txt", std::ios::app);
             myfile << "\tIter\t" << p2ip_data->iter_count();
             std::cout.precision(8);
             myfile << "\tCPUs\t" << std::scientific << cpu_time_overall_alg;
