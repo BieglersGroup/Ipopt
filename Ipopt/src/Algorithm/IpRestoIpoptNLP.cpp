@@ -334,9 +334,9 @@ namespace Ipopt
         }
         else {
             SmartPtr<SumSymMatrixSpace> sumsym_mat_space =
-                    new SumSymMatrixSpace(orig_x_space->Dim(), 2);
+                    new SumSymMatrixSpace(orig_x_space->Dim(), 1);
             sumsym_mat_space->SetTermSpace(0, *orig_h_space);
-            sumsym_mat_space->SetTermSpace(1, *DR_x_space);
+            //sumsym_mat_space->SetTermSpace(1, *DR_x_space);
             h_space_->SetCompSpace(0, 0, *sumsym_mat_space, true);
             // All remaining blocks are zero'ed out
         }
@@ -708,7 +708,7 @@ namespace Ipopt
         SmartPtr<Matrix> h_sum_mat = retPtr->GetCompNonConst(0,0);
         SmartPtr<SumSymMatrix> h_sum = static_cast<SumSymMatrix*>(GetRawPtr(h_sum_mat));
         h_sum->SetTerm(0, 1.0, *h_con_orig);
-        h_sum->SetTerm(1, 0.0, *DR_x_);
+        //h_sum->SetTerm(1, 0.0, *DR_x_);
 
         return GetRawPtr(retPtr);
     }
@@ -725,7 +725,7 @@ namespace Ipopt
             SmartPtr<Matrix> h_sum_mat = retPtr->GetCompNonConst(0,0);
             SmartPtr<SumSymMatrix> h_sum = static_cast<SumSymMatrix*>(GetRawPtr(h_sum_mat));
             h_sum->SetTerm(0, 1.0, *h_con_orig);
-            h_sum->SetTerm(1, 0.0, *DR_x_);
+            //h_sum->SetTerm(1, 0.0, *DR_x_);
         }
 
         return GetRawPtr(retPtr);

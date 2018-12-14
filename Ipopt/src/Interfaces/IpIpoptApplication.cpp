@@ -966,6 +966,7 @@ namespace Ipopt
 
             std::ofstream myfile;
             myfile.open("timings.txt", std::ios::app);
+            myfile << "\tIter\t" << p2ip_data->iter_count();
             std::cout.precision(8);
             myfile << "\tCPUs\t" << std::scientific << cpu_time_overall_alg;
 

@@ -779,7 +779,7 @@ namespace Ipopt
         std::ofstream myfile;
         myfile.open("timings.txt", std::ios::app);
         myfile << "\tn\t" << nx_tot << "\tme\t" << IpData().curr()->y_c()->Dim() << "\tmi\t" << ns_tot;
-        myfile.clear();
+        myfile.close();
     }
 
     void IpoptAlgorithm::ComputeFeasibilityMultipliers()

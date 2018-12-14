@@ -20,7 +20,7 @@ namespace Ipopt
   static const Index dbg_verbosity = 0;
 #endif
 
-  RestoConvergenceCheck::RestoConvergenceCheck()
+      RestoConvergenceCheck::RestoConvergenceCheck()
   {
     DBG_START_FUN("RestoConvergenceCheck::RestoConvergenceCheck()",
                   dbg_verbosity);
