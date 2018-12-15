@@ -6,6 +6,7 @@
 //
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
+#include <assert.h>
 #include "IpRestoIpoptNLP.hpp"
 #include "IpIdentityMatrix.hpp"
 #include "IpSumSymMatrix.hpp"
@@ -510,7 +511,7 @@ namespace Ipopt
 
         Number orig_f = orig_ip_nlp_->f(*x_only);
 
-        ret += orig_f;
+        ret += orig_f * Scf(mu);
 
         my_jrnl.Printf(J_INSUPPRESSIBLE, J_USER1, "my f\t%f\n", ret);
         return ret;
@@ -531,10 +532,11 @@ namespace Ipopt
         SmartPtr<const Vector> gf_original = orig_ip_nlp_->grad_f(*x_only_in);
 //      std::cout << "success!";
 //    }
+
         SmartPtr<Vector> x_only = c_vec->GetCompNonConst(0);
         x_only->Copy(*gf_original);
-//    x_only->Axpy(-1.0, *x_ref_);
-        //x_only->ElementWiseMultiply(*dr_x_);
+        x_only->Scal(Scf(mu));  // scale the damn thing!
+
 
         return ConstPtr(retPtr);
     }
@@ -663,6 +665,7 @@ namespace Ipopt
     )
     {
         assert(false && "ERROR: In RestoIpoptNLP h() is called without mu!");
+
         return NULL;
     }
 
@@ -698,7 +701,7 @@ namespace Ipopt
         SmartPtr<const Vector> Cyd0 = Cyd->GetComp(0);
 
         // calculate the original hessian
-        SmartPtr<const SymMatrix> h_con_orig = orig_ip_nlp_->h(*x_only, 1.0, *Cyc0, *Cyd0);
+        SmartPtr<const SymMatrix> h_con_orig = orig_ip_nlp_->h(*x_only, Scf(mu), *Cyc0, *Cyd0);
 
         // Create the new compound matrix
         // The SumSymMatrix is auto_allocated
@@ -765,6 +768,16 @@ namespace Ipopt
     Number RestoIpoptNLP::Eta(Number mu) const
     {
         return eta_factor_ * pow(mu, eta_mu_exponent_);
+    }
+
+    Number RestoIpoptNLP::Scf(Ipopt::Number mu) const {
+        Number scf = orig_ip_nlp_->f(*x_ref_);   // ref scale
+        if(scf > 1e-08){
+            scf = 1/scf;
+        } else{
+            scf = 1e+06; // for safety
+        }
+        return Eta(mu) * scf;
     }
 
     void RestoIpoptNLP::AdjustVariableBounds(const Vector& new_x_L, const Vector& new_x_U,

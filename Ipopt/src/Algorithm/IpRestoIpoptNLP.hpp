@@ -287,6 +287,7 @@ namespace Ipopt
 
         /** Method to calculate eta, the factor for the regularization term */
         Number Eta(Number mu) const;
+        Number Scf(Number mu) const;
 
         /** Method returning the scaling factors for the 2-norm
          *  penalization term. */
