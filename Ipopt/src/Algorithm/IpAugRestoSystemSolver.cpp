@@ -219,12 +219,18 @@ namespace Ipopt
             WR_sum->GetTerm(0, temp_factor, h_orig);
             DBG_ASSERT(temp_factor == 1. || temp_factor == 0.);
             orig_W_factor = temp_factor * W_factor;
-            // @dthierry: I had to get rid of this for the new-restoration
-            if (IsValid(CD_x)) {
-                D_xR = CD_x->GetComp(0);
+            SmartPtr<const SymMatrix> eta_DR;
+            double factor;
+            WR_sum->GetTerm(1, factor, eta_DR);
+            SmartPtr<const Vector> wr_d = static_cast<const DiagMatrix*>(GetRawPtr(eta_DR))->GetDiag();
+
+            if( IsValid(CD_x) )
+            {
+                D_xR = D_x_plus_wr_d(CD_x->GetComp(0), factor, *wr_d);
             }
-            else {
-                D_xR = NULL;
+            else
+            {
+                D_xR = D_x_plus_wr_d(NULL, factor, *wr_d);
             }
         }
         else {
